@@ -18,7 +18,7 @@ require(caret)
 data(attrition)
 
 
-#. The str command shows we have a bunch of variables which are of type integer. 
+#. The str command shows we have a bunch of variables which are of type integer.
 str(attrition)
 
 #Checking number of variables as factor
@@ -50,11 +50,11 @@ attrition %>%
     NumCompaniesWorked = factor(NumCompaniesWorked),
     StockOptionLevel = factor(StockOptionLevel),
     TrainingTimesLastYear = factor(TrainingTimesLastYear)
-  ) %>% 
+  ) %>%
   str
 
 ####Another way
-attrition <- attrition %>% 
+attrition <- attrition %>%
   mutate_if(function(col) length(unique(col)) <= 10 & is.integer(col), as.factor)
 
 
@@ -75,7 +75,7 @@ summary(attrition)
 #first model using all 1,470 cases, the 18 factors we have available to
 #predict with and we are trying to predict attrition
 
-newattrit <- attrition %>% 
+newattrit <- attrition %>%
   select_if(is.factor)
 dim(newattrit)
 
@@ -116,7 +116,7 @@ plot(
 
 ################
 # minsplit - Number of observations in splitted response at which no further split is desired.
-# 
+#
 # minprob - Minimum frequency of observations in terminal nodes.
 # maxheight - Maximum height for the tree.
 
@@ -189,12 +189,12 @@ install.packages("kableExtra")
 library(kableExtra)
 modellist <- list(Model1 = chaidattrit1, Model2 = chaidattrit2, Model3 = chaidattrit3, Model4 = chaidattrit4)
 
-CHAIDResults <- map(modellist, ~ predict(.x)) %>% 
+CHAIDResults <- map(modellist, ~ predict(.x)) %>%
   map(~ confusionMatrix(newattrit$Attrition, .x)) %>%
   map_dfr(~ cbind(as.data.frame(t(.x$overall)),as.data.frame(t(.x$byClass))), .id = "ModelNumb")
 
-kable(CHAIDResults, "html") %>% 
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+kable(CHAIDResults, "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 font_size = 9)
 
 
